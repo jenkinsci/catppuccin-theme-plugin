@@ -1,6 +1,6 @@
 package io.jenkins.plugins.theme.catppuccin.playwright;
 
-import java.util.StringJoiner;
+import io.jenkins.plugins.thememanager.ThemeManagerFactoryDescriptor;
 
 public record Theme(String name, String id, CssVariable variableToCheck) {
     public Theme {
@@ -15,30 +15,8 @@ public record Theme(String name, String id, CssVariable variableToCheck) {
         }
     }
 
-    public static Theme of(String theme, CssVariable variableToCheck) {
-        if (theme == null || theme.isEmpty()) {
-            throw new IllegalArgumentException("Theme name cannot be null or empty");
-        }
-        String name;
-        String id;
-        if (theme.contains(" ")) {
-            // given a theme name, lowercase it and replace spaces with dashes
-            name = theme;
-            id = theme.toLowerCase().replace(" ", "-");
-        } else if (theme.contains("-")) {
-            // given a theme id, titlecase it and replace dashes with spaces
-            id = theme;
-            StringJoiner joiner = new StringJoiner(" ");
-            for (String s : theme.split("-")) {
-                joiner.add(Character.toUpperCase(s.charAt(0)) + s.substring(1));
-            }
-            name = joiner.toString();
-        } else {
-            // the theme is a single word, use it as both name and id
-            name = theme;
-            id = theme.toLowerCase();
-        }
-        return new Theme(name, id, variableToCheck);
+    public static Theme of(ThemeManagerFactoryDescriptor theme, CssVariable variableToCheck) {
+        return new Theme(theme.getDisplayName(), theme.getThemeKey(), variableToCheck);
     }
 
     public record CssVariable(String name, String expected) {

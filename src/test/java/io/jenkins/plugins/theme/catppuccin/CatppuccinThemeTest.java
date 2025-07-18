@@ -17,36 +17,11 @@ public class CatppuccinThemeTest {
     @Test
     void themeLoads(JenkinsRule j, Page p) {
         List<Theme> themes = List.of(
-                Theme.of("Catppuccin Frappe", Theme.CssVariable.background("#303446")),
-                Theme.of("Catppuccin Latte", Theme.CssVariable.background("#eff1f5")),
-                Theme.of("Catppuccin Macchiato", Theme.CssVariable.background("#24273a")),
-                Theme.of("Catppuccin Mocha", Theme.CssVariable.background("#1e1e2e")));
-        /*
-            try (var client = j.createWebClient()) {
-              HtmlPage appearancePage = client.goTo("manage/appearance/");
-              for (Theme theme : themes) {
-                Function<String, ScriptResult> getComputedStyleProperty = selector -> {
-                  String script = "window.getComputedStyle(document.querySelector(\"%s\")).getPropertyValue(\"%s\");"
-                      .formatted(selector, theme.variableToCheck().name());
-                  System.out.println(script);
-                  return appearancePage.executeJavaScript(
-                      script
-                  );
-                };
+                Theme.of(new CatppuccinFrappeTheme.DescriptorImpl(), Theme.CssVariable.background("#303446")),
+                Theme.of(new CatppuccinLatteTheme.DescriptorImpl(), Theme.CssVariable.background("#eff1f5")),
+                Theme.of(new CatppuccinMacchiatoTheme.DescriptorImpl(), Theme.CssVariable.background("#24273a")),
+                Theme.of(new CatppuccinMochaTheme.DescriptorImpl(), Theme.CssVariable.background("#1e1e2e")));
 
-                HtmlElement themeRadio = appearancePage.querySelector("input[data-theme='" + theme.id() + "']");
-                assertEquals(theme.name(), themeRadio.getParentNode().getVisibleText());
-                ScriptResult result = getComputedStyleProperty.apply(
-                    ".app-theme-picker__picker[data-theme='" + theme.id() + "'] > svg > g > rect:nth-child(1)"
-                );
-                theme.variableToCheck().verify(result.getJavaScriptResult());
-                themeRadio.click();
-                result = getComputedStyleProperty.apply("body");
-                theme.variableToCheck().verify(result.getJavaScriptResult());
-              }
-
-            }
-        */
         AppearancePage page = new AppearancePage(p, j.jenkins.getRootUrl()).goTo();
         for (Theme theme : themes) {
             page.themeIsPresent(theme).selectTheme(theme).themeIsApplied(theme);
