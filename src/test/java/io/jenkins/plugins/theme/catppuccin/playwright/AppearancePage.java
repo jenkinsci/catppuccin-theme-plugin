@@ -1,0 +1,73 @@
+package io.jenkins.plugins.theme.catppuccin.playwright;
+
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Page.GetByRoleOptions;
+import com.microsoft.playwright.options.AriaRole;
+import io.jenkins.plugins.theme.catppuccin.playwright.Theme.CssVariable;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class AppearancePage extends JenkinsPage<AppearancePage> {
+
+  private static final Logger log = LoggerFactory.getLogger(AppearancePage.class);
+
+  public AppearancePage(Page page, String rootUrl) {
+    super(page, rootUrl + "/manage/appearance/");
+  }
+
+  public AppearancePage themeIsPresent(Theme theme) {
+    log.info("Checking if theme '{}' is present", theme);
+    Locator themeBox = getThemeBox(theme);
+    assertThat(themeBox).isVisible();
+    checkAppearance(".app-theme-picker__picker[data-theme='" + theme.id() + "'] > svg > g > rect:nth-child(1)", theme.variableToCheck());
+    return this;
+  }
+
+  public AppearancePage selectTheme(Theme theme) {
+    log.info("Selecting theme '{}'", theme.name());
+    getThemeBox(theme).click();
+    return this;
+  }
+
+  public AppearancePage themeIsApplied(Theme theme) {
+    log.info("Checking if theme '{}' is applied", theme);
+    assertThat(page.locator("html")).hasAttribute("data-theme", theme.id());
+    assertThat(getThemeBox(theme).getByRole(AriaRole.RADIO)).isChecked();
+    checkAppearance("body", theme.variableToCheck());
+    return this;
+  }
+
+  /**
+   * Locates the theme box for the given theme.
+   *
+   * @param theme the theme to locate
+   * @return the locator for the theme box
+   */
+  private Locator getThemeBox(Theme theme) {
+    log.debug("Locating theme box for '{}'", theme);
+    return page.getByRole(AriaRole.RADIO, new GetByRoleOptions().setName(theme.name())).locator("..");
+  }
+
+  /**
+   * Checks the appearance of an element based on a CSS variable.
+   *
+   * @param selector the CSS selector of the element to check
+   * @param cssVariable the CSS variable to check against
+   */
+  private void checkAppearance(String selector, CssVariable cssVariable) {
+    log.debug("Checking appearance for selector '{}' with CSS variable '{}'", selector, cssVariable);
+    page.waitForFunction(
+        """
+            ([selector, cssVar, expected]) => {
+              const el = document.querySelector(selector);
+              if (!el) return false;
+              return getComputedStyle(el).getPropertyValue(cssVar).trim() === expected;
+            }""",
+        List.of(selector, cssVariable.name(), cssVariable.expected())
+    );
+  }
+}
