@@ -5,8 +5,8 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Page.GetByRoleOptions;
+import com.microsoft.playwright.TimeoutError;
 import com.microsoft.playwright.options.AriaRole;
-import io.jenkins.plugins.theme.catppuccin.playwright.Theme.CssVariable;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,17 +59,32 @@ public class AppearancePage extends JenkinsPage<AppearancePage> {
      * Checks the appearance of an element based on a CSS variable.
      *
      * @param selector the CSS selector of the element to check
-     * @param cssVariable the CSS variable to check against
+     * @param variable the CSS variable to check against
      */
-    private void checkAppearance(String selector, CssVariable cssVariable) {
-        log.debug("Checking appearance for selector '{}' with CSS variable '{}'", selector, cssVariable);
-        page.waitForFunction(
-                """
+    private void checkAppearance(String selector, Theme.CssVariable variable) {
+        log.debug("Checking appearance for selector '{}' with CSS variable '{}'", selector, variable);
+        try {
+            page.waitForFunction(
+                    """
             ([selector, cssVar, expected]) => {
               const el = document.querySelector(selector);
               if (!el) return false;
               return getComputedStyle(el).getPropertyValue(cssVar).trim() === expected;
             }""",
-                List.of(selector, cssVariable.name(), cssVariable.expected()));
+                    List.of(selector, variable.name(), variable.expected()));
+        } catch (TimeoutError e) {
+            Object value = page.evaluate(
+                    """
+                    ([selector, cssVar]) => {
+                      const el = document.querySelector(selector);
+                      if (!el) return null;
+                      return getComputedStyle(el).getPropertyValue(cssVar).trim();
+                    }""",
+                    List.of(selector, variable.name()));
+            throw new AssertionError(
+                    "Could not verify that '%s' was equal to '%s', found '%s'"
+                            .formatted(variable.name(), variable.expected(), value),
+                    e);
+        }
     }
 }

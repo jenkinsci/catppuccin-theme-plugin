@@ -25,7 +25,7 @@ public record Theme(String name, String id, CssVariable variableToCheck) {
             // given a theme name, lowercase it and replace spaces with dashes
             name = theme;
             id = theme.toLowerCase().replace(" ", "-");
-        } else {
+        } else if (theme.contains("-")) {
             // given a theme id, titlecase it and replace dashes with spaces
             id = theme;
             StringJoiner joiner = new StringJoiner(" ");
@@ -33,6 +33,10 @@ public record Theme(String name, String id, CssVariable variableToCheck) {
                 joiner.add(Character.toUpperCase(s.charAt(0)) + s.substring(1));
             }
             name = joiner.toString();
+        } else {
+            // the theme is a single word, use it as both name and id
+            name = theme;
+            id = theme.toLowerCase();
         }
         return new Theme(name, id, variableToCheck);
     }
