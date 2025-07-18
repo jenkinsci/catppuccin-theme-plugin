@@ -21,8 +21,8 @@ public class AppearancePage extends JenkinsPage<AppearancePage> {
 
     public AppearancePage themeIsPresent(Theme theme) {
         log.info("Checking if theme '{}' is present", theme);
-        Locator themeBox = getThemeBox(theme);
-        assertThat(themeBox).isVisible();
+        Locator themeCard = getThemeCard(theme);
+        assertThat(themeCard).isVisible();
         checkAppearance(
                 ".app-theme-picker__picker[data-theme='" + theme.id() + "'] > svg > g > rect:nth-child(1)",
                 theme.variableToCheck());
@@ -31,25 +31,25 @@ public class AppearancePage extends JenkinsPage<AppearancePage> {
 
     public AppearancePage selectTheme(Theme theme) {
         log.info("Selecting theme '{}'", theme.name());
-        getThemeBox(theme).click();
+        getThemeCard(theme).click();
         return this;
     }
 
     public AppearancePage themeIsApplied(Theme theme) {
         log.info("Checking if theme '{}' is applied", theme);
         assertThat(page.locator("html")).hasAttribute("data-theme", theme.id());
-        assertThat(getThemeBox(theme).getByRole(AriaRole.RADIO)).isChecked();
+        assertThat(getThemeCard(theme).getByRole(AriaRole.RADIO)).isChecked();
         checkAppearance("body", theme.variableToCheck());
         return this;
     }
 
     /**
-     * Locates the theme box for the given theme.
+     * Locates the theme card for the given theme.
      *
      * @param theme the theme to locate
-     * @return the locator for the theme box
+     * @return the locator for the theme card
      */
-    private Locator getThemeBox(Theme theme) {
+    private Locator getThemeCard(Theme theme) {
         log.debug("Locating theme box for '{}'", theme);
         return page.getByRole(AriaRole.RADIO, new GetByRoleOptions().setName(theme.name()))
                 .locator("..");
