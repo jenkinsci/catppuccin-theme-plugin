@@ -19,9 +19,7 @@ public class CatppuccinFrappeTheme extends ThemeManagerFactory {
 
     @Override
     public Theme getTheme() {
-      return Theme.builder()
-            .withCssUrls(List.of(getCssUrl()))
-            .build();
+        return Theme.builder().withCssUrls(List.of(getCssUrl())).build();
     }
 
     @Extension

@@ -14,11 +14,10 @@ import org.kohsuke.stapler.StaplerResponse2;
 public class CatppuccinRootAction implements UnprotectedRootAction {
 
     private static final Set<String> THEMES = Set.of(
-        CatppuccinLatteTheme.CSS,
-        CatppuccinFrappeTheme.CSS,
-        CatppuccinMacchiatoTheme.CSS,
-        CatppuccinMochaTheme.CSS
-    );
+            CatppuccinLatteTheme.CSS,
+            CatppuccinFrappeTheme.CSS,
+            CatppuccinMacchiatoTheme.CSS,
+            CatppuccinMochaTheme.CSS);
 
     @Override
     public String getIconFileName() {
