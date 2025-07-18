@@ -36,10 +36,6 @@ public record Theme(String name, String id, CssVariable variableToCheck) {
         public static CssVariable background(String expectedValue) {
             return new CssVariable("--background", expectedValue);
         }
-
-        public String name() {
-            return name;
-        }
     }
 
     @Override
