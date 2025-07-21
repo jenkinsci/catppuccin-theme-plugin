@@ -14,7 +14,7 @@ import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
 @WithJenkins
 @UsePlaywright(PlaywrightConfig.class)
-public class CatppuccinThemeTest {
+class CatppuccinThemeTest {
 
     private static String rootUrl;
 
