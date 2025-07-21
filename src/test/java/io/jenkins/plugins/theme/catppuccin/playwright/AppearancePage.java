@@ -11,7 +11,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AppearancePage extends JenkinsPage<AppearancePage> {
+class AppearancePage extends JenkinsPage<AppearancePage> {
 
     private static final Logger log = LoggerFactory.getLogger(AppearancePage.class);
 
@@ -21,11 +21,8 @@ public class AppearancePage extends JenkinsPage<AppearancePage> {
 
     public AppearancePage themeIsPresent(Theme theme) {
         log.info("Checking if theme '{}' is present", theme);
-        Locator themeCard = getThemeCard(theme);
-        assertThat(themeCard).isVisible();
-        checkAppearance(
-                ".app-theme-picker__picker[data-theme='" + theme.id() + "'] > svg > g > rect:nth-child(1)",
-                theme.variableToCheck());
+        assertThat(getThemeCard(theme)).isVisible();
+        checkAppearance(".app-theme-picker__picker[data-theme='" + theme.id() + "']", theme.variableToCheck());
         return this;
     }
 
@@ -37,18 +34,12 @@ public class AppearancePage extends JenkinsPage<AppearancePage> {
 
     public AppearancePage themeIsApplied(Theme theme) {
         log.info("Checking if theme '{}' is applied", theme);
-        assertThat(page.locator("html")).hasAttribute("data-theme", theme.id());
         assertThat(getThemeCard(theme).getByRole(AriaRole.RADIO)).isChecked();
+        assertThat(page.locator("html")).hasAttribute("data-theme", theme.id());
         checkAppearance("body", theme.variableToCheck());
         return this;
     }
 
-    /**
-     * Locates the theme card for the given theme.
-     *
-     * @param theme the theme to locate
-     * @return the locator for the theme card
-     */
     private Locator getThemeCard(Theme theme) {
         log.debug("Locating theme box for '{}'", theme);
         return page.getByRole(AriaRole.RADIO, new GetByRoleOptions().setName(theme.name()))
