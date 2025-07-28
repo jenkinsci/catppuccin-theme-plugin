@@ -43,19 +43,19 @@ public abstract class AbstractThemeJCasCTest {
     @ConfiguredWithCode("ConfigurationAsCode.yml")
     void testExport(JenkinsConfiguredWithCodeRule j) throws Exception {
         ConfigurationContext context = new ConfigurationContext(ConfiguratorRegistry.get());
-        CNode yourAttribute = getAppearanceRoot(context).get("themeManager");
+        CNode themeManager = getAppearanceRoot(context).get("themeManager");
 
-        String exported = toYamlString(yourAttribute);
+        String exported = toYamlString(themeManager);
         String expected = toStringFromYamlFile(this, "ConfigurationAsCodeExport.yml");
 
         assertThat(exported, is(expected));
     }
 
-    protected static Mapping getAppearanceRoot(ConfigurationContext context) {
+    private static Mapping getAppearanceRoot(ConfigurationContext context) {
         GlobalConfigurationCategory category =
                 ExtensionList.lookup(AppearanceCategory.class).get(0);
         GlobalConfigurationCategoryConfigurator configurator = new GlobalConfigurationCategoryConfigurator(category);
-        return Objects.requireNonNull(configurator.describe(configurator.getTargetComponent(context), context))
-                .asMapping();
+        GlobalConfigurationCategory target = configurator.getTargetComponent(context);
+        return Objects.requireNonNull(configurator.describe(target, context)).asMapping();
     }
 }
