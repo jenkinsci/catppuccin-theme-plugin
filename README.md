@@ -1,6 +1,6 @@
 # Catppuccin Theme Plugin
 
-[![Build Status](https://ci.jenkins.io/job/Plugins/job/catppuccin-theme-plugin/job/main/badge/icon)](https://ci.jenkins.io/job/Plugins/job/catppuccin-theme-plugin/job/main/)
+[![Build Status](https://ci.jenkins.io/buildStatus/icon?job=Plugins%2Fcatppuccin-theme-plugin%2Fmain)](https://ci.jenkins.io/job/Plugins/job/catppuccin-theme-plugin/job/main/)
 [![Gitter](https://badges.gitter.im/jenkinsci/ux-sig.svg)](https://gitter.im/jenkinsci/ux-sig?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/catppuccin-theme.svg)](https://plugins.jenkins.io/catppuccin-theme)
 [![Jenkins Plugin Installs](https://img.shields.io/jenkins/plugin/i/catppuccin-theme.svg?color=blue)](https://plugins.jenkins.io/catppuccin-theme)
