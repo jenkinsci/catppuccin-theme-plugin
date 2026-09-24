@@ -56,8 +56,6 @@
 
   /* Form - deprecated */
   --input-color: var(--elevation-2-background);
-  --input-border: color-mix(in srgb, var(--text-color-secondary) 30%, var(--background));
-  --input-border-hover: color-mix(in srgb, var(--text-color-secondary) 40%, var(--background));
 
   /* Default button */
   --button-background: oklch(from var(--text-color-secondary) l c h / 0.075);
