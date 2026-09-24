@@ -29,6 +29,12 @@
   --background: var(--catppuccin-base);
   --accent-color: var(--catppuccin-lavender);
 
+  /* Elevation */
+  --elevation-1-background: oklch(from var(--background) calc(l + 0.005) c h);
+  --elevation-2-background: oklch(from var(--background) calc(l + 0.01) c h);
+  --elevation-3-background: oklch(from var(--background) calc(l + 0.015) c h);
+  --elevation-4-background: oklch(from var(--background) calc(l + 0.02) c h);
+
   /* Text */
   --text-color: var(--catppuccin-text);
   --text-color-secondary: var(--catppuccin-subtext0);
@@ -39,15 +45,15 @@
   /* Tabs - Deprecated */
   --tabs-item-background--selected: var(--card-background);
 
-  /* Table */
+  /* Table - deprecated */
   --table-background: color-mix(in srgb, var(--background) 95%, var(--text-color-secondary));
   --table-body-background: var(--card-background);
 
   /* Side panel */
   --panel-border-color: color-mix(in srgb, var(--text-color-secondary) 15%, var(--card-background));
 
-  /* Form */
-  --input-color: color-mix(in srgb, var(--text-color-secondary) 3%, var(--background));
+  /* Form - deprecated */
+  --input-color: var(--elevation-2-background);
   --input-border: color-mix(in srgb, var(--text-color-secondary) 30%, var(--background));
   --input-border-hover: color-mix(in srgb, var(--text-color-secondary) 40%, var(--background));
 
@@ -70,13 +76,8 @@
   );
   --item-box-shadow--focus: oklch(from var(--text-color-secondary) l c h / 0.1);
 
-  /* Card */
-  --card-background: color-mix(in srgb, var(--background) 95%, white);
-  --card-border-color: var(--prefers-contrast, color-mix(in srgb, var(--text-color-secondary) 10%, var(--card-background)));
-
-  @media (prefers-contrast: more) {
-    --prefers-contrast: var(--text-color);
-  }
+  /* Card - deprecated */
+  --card-background: var(--elevation-2-background);
 
   /* Colors */
   /* Base palette to match background and accent-color theme */
